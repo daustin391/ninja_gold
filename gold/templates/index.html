@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ninja Money</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <main>
+        <p>Your Gold: <span>{{request.session.gold}}</span></p>
+        <div id="forms">
+            {% for ix in request.session.locations %}
+            <form action="/process_money" method="POST">
+                {% csrf_token %}
+                <h2>{{ix.name}}</h2>
+                {% if ix.min >= 0 %}
+                <p>(earns {{ix.min}}-{{ix.max}} golds)</p>
+                {% else %}
+                <p>(earns/takes 0-{{ix.max}} golds)</p>
+                {% endif %}
+                <input type="hidden" name="{{ix.name}}">
+                <button type="submit">Find Gold!</button>
+            </form>
+            {% endfor %}
+        </div>
+        <p>Activities:</p>
+        <div id="activities">
+            {% for ix in request.session.activities %}
+            <p>
+                {{ix}}
+            </p>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+
+</html>
